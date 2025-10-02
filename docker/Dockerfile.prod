@@ -1,13 +1,4 @@
-# Multi-stage build for production
-FROM node:18-alpine AS frontend-build
-
-WORKDIR /app/frontend
-COPY frontend/package*.json ./
-RUN npm ci --only=production
-COPY frontend/ ./
-RUN npm run build
-
-FROM python:3.9-slim AS backend-build
+FROM python:3.9-slim
 
 WORKDIR /app
 
@@ -30,15 +21,12 @@ COPY backend/ ./backend/
 COPY rasa/ ./rasa/
 COPY database/ ./database/
 
-# Copy built frontend
-COPY --from=frontend-build /app/frontend/dist ./frontend/dist
-
 # Create non-root user
 RUN useradd -m -u 1000 appuser && chown -R appuser:appuser /app
 USER appuser
 
-# Expose ports
-EXPOSE 8000 5005 5055
+# Expose port
+EXPOSE 8000
 
 # Health check
 HEALTHCHECK --interval=30s --timeout=10s --start-period=5s --retries=3 \
