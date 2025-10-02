@@ -39,7 +39,7 @@ RUN useradd -m -u 1000 appuser && chown -R appuser:appuser /app
 
 # TRAIN MODEL AS NON-ROOT USER (Rasa 3.x compatible)
 USER appuser
-RUN cd rasa && rasa train
+RUN cd rasa && rasa train --out models
 
 # Expose port (only 8000 for Render)
 EXPOSE 8000
@@ -48,5 +48,5 @@ EXPOSE 8000
 HEALTHCHECK --interval=30s --timeout=10s --start-period=5s --retries=3 \
     CMD curl -f http://localhost:8000/health || exit 1
 
-# Start command - Rasa 3.x compatible with model loading
-CMD ["sh", "-c", "cd /app/rasa && rasa run actions --actions actions --port 5055 & sleep 10 && rasa run --enable-api --cors '*' --port 5005 --model models & sleep 15 && cd /app/backend && uvicorn app.main:app --host 0.0.0.0 --port 8000"]
+# Start command - Use absolute path to models directory
+CMD ["sh", "-c", "cd /app/rasa && rasa run actions --actions actions --port 5055 & sleep 10 && cd /app/rasa && rasa run --enable-api --cors '*' --port 5005 --model /app/rasa/models & sleep 15 && cd /app/backend && uvicorn app.main:app --host 0.0.0.0 --port 8000"]
