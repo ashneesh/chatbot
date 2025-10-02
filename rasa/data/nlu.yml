@@ -1,0 +1,342 @@
+# version: "3.1"
+
+# nlu:
+#   - intent: greet
+#     examples: |
+#       - hi
+#       - hello
+#       - hey
+#       - good morning
+#       - good evening
+
+#   - intent: goodbye
+#     examples: |
+#       - bye
+#       - goodbye
+#       - see you later
+
+#   - intent: report_symptom
+#     examples: |
+#       - I have a headache
+#       - My stomach hurts
+#       - Feeling dizzy
+#       - I have a rash on my arm
+
+#   - intent: book_appointment
+#     examples: |
+#       - I want to book an appointment
+#       - Schedule a visit for me
+#       - Can I see a doctor tomorrow?
+
+#   - intent: cancel_appointment
+#     examples: |
+#       - Cancel my appointment
+#       - I cannot make it to my appointment
+#       - Reschedule my visit
+
+#   - intent: get_advice
+#     examples: |
+#       - I need health advice
+#       - What should I do about this symptom?
+#       - Can you give me guidance on my condition?
+
+#   - intent: handover_to_nurse
+#     examples: |
+#       - I want to speak to a nurse
+#       - Connect me to a nurse
+#       - Transfer me to a healthcare professional
+
+#   - intent: emergency
+#     examples: |
+#       - I am having chest pain
+#       - This is an emergency
+#       - I need urgent help
+
+#   - intent: out_of_scope
+#     examples: |
+#       - Tell me a joke
+#       - What is the weather today?
+#       - Who won the match yesterday?
+version: "3.1"
+
+nlu:
+  - intent: greet
+    examples: |
+      - hello
+      - Hello
+      - hi
+      - hey
+      - good morning
+      - good afternoon
+      - good evening
+      - greetings
+      - howdy
+      - what's up
+      - hey there
+      - hello there
+      - hi there
+      - morning
+      - afternoon
+      - evening
+      - hiya
+      - sup
+      - yo
+      - hey doc
+      - hello doctor
+      - hi healthcare assistant
+
+  - intent: goodbye
+    examples: |
+      - goodbye
+      - bye
+      - see you later
+      - thanks, bye
+      - goodbye for now
+      - farewell
+      - see ya
+      - catch you later
+      - until next time
+      - take care
+      - have a good day
+      - have a great day
+      - thanks for your help
+      - that's all for now
+      - I'm done
+      - exit
+      - quit
+      - end chat
+      - close
+      - thank you and goodbye
+
+  - intent: affirm
+    examples: |
+      - yes
+      - yeah
+      - yep
+      - sure
+      - of course
+      - definitely
+      - absolutely
+      - correct
+      - right
+      - that's right
+      - exactly
+      - indeed
+      - affirmative
+      - ok
+      - okay
+      - alright
+      - sounds good
+      - I agree
+      - that works
+      - perfect
+
+  - intent: deny
+    examples: |
+      - no
+      - nope
+      - not really
+      - I don't think so
+      - definitely not
+      - absolutely not
+      - incorrect
+      - wrong
+      - that's not right
+      - I disagree
+      - negative
+      - not at all
+      - never
+      - no way
+      - not interested
+      - I don't want that
+      - that doesn't work
+      - I refuse
+
+  - intent: report_symptoms
+    examples: |
+      - I have a [headache](symptom)
+      - My [stomach](body_part) hurts
+      - I'm feeling [dizzy](symptom)
+      - I have [chest pain](symptom)
+      - My [throat](body_part) is sore
+      - I have a [fever](symptom)
+      - I'm experiencing [nausea](symptom)
+      - My [back](body_part) is aching
+      - I have [joint pain](symptom)
+      - I'm feeling [weak](symptom)
+      - I have [shortness of breath](symptom)
+      - My [head](body_part) is pounding
+      - I have [abdominal pain](symptom)
+      - I'm experiencing [fatigue](symptom)
+      - I have [muscle aches](symptom)
+      - My [knee](body_part) hurts
+      - I have [cold symptoms](symptom)
+      - I'm feeling [unwell](symptom)
+      - I have [flu symptoms](symptom)
+      - My [shoulder](body_part) is painful
+      - I have [migraine](symptom)
+      - I'm experiencing [dizziness](symptom)
+      - I have [sinus pain](symptom)
+      - My [ankle](body_part) is swollen
+      - I have [allergic reactions](symptom)
+      - I'm feeling [lightheaded](symptom)
+      - I have [rash](symptom)
+      - My [wrist](body_part) hurts
+      - I have [insomnia](symptom)
+      - I'm experiencing [anxiety](symptom)
+      - I have [depression symptoms](symptom)
+      - My [vision](body_part) is blurry
+      - I have [hearing problems](symptom)
+      - I'm feeling [stressed](symptom)
+      - I have [digestive issues](symptom)
+      - My [leg](body_part) is cramping
+      - I have [high blood pressure](symptom)
+      - I'm experiencing [palpitations](symptom)
+      - I have [skin irritation](symptom)
+      - My [neck](body_part) is stiff
+      - I have been [coughing](symptom)
+      - I'm experiencing [constipation](symptom)
+      - I have [diarrhea](symptom)
+      - My [arm](body_part) is numb
+      - I have [tooth pain](symptom)
+      - I'm feeling [bloated](symptom)
+      - I have [menstrual cramps](symptom)
+      - My [hip](body_part) is sore
+      - I have [heartburn](symptom)
+
+  - intent: book_appointment
+    examples: |
+      - I need an appointment
+      - Can I book an appointment
+      - Schedule me an appointment
+      - I want to see a doctor
+      - I'd like to make an appointment
+      - Can I schedule a visit
+      - I need to see a healthcare provider
+      - Book me a slot
+      - I want to schedule a consultation
+      - Can I get an appointment today
+      - I need to see someone urgently
+      - Schedule me for tomorrow
+      - I want an appointment this week
+      - Can I book for next week
+      - I need a follow-up appointment
+      - Schedule a check-up
+      - I want to see a specialist
+      - Can I book with a doctor
+      - I need medical consultation
+      - Schedule me with a physician
+      - I want to book a health check
+      - Can I get a same-day appointment
+      - I need to schedule a visit
+      - Book an appointment for me
+      - I want to see the doctor
+      - Can I make a reservation
+      - I need healthcare services
+      - Schedule me for a consultation
+      - I want medical attention
+      - Can I book a time slot
+
+  - intent: get_health_advice
+    examples: |
+      - What should I do about my symptoms
+      - Can you give me health advice
+      - What do you recommend
+      - How should I treat this
+      - What's the best course of action
+      - Should I be worried
+      - Is this serious
+      - What are my options
+      - How can I feel better
+      - What treatment do you suggest
+      - Should I see a doctor
+      - Is this normal
+      - What could this be
+      - How do I manage this condition
+      - What are the next steps
+      - Should I take medication
+      - How urgent is this
+      - What should I avoid
+      - How can I prevent this
+      - What lifestyle changes should I make
+
+  - intent: ask_emergency
+    examples: |
+      - This is an emergency
+      - I need help now
+      - Call 911
+      - Emergency
+      - I need urgent help
+      - This is urgent
+      - Medical emergency
+      - Help me please
+      - I'm in serious pain
+      - Something is very wrong
+      - I can't breathe
+      - I'm having chest pain
+      - I think I'm having a heart attack
+      - I'm bleeding heavily
+      - I've been in an accident
+      - I'm unconscious
+      - Someone is unconscious
+      - Call an ambulance
+      - I need immediate medical attention
+      - This is life threatening
+      - I'm having severe symptoms
+      - Rush me to hospital
+      - Critical situation
+      - I'm in distress
+      - Please help urgently
+      - Medical crisis
+      - I need paramedics
+      - Emergency room
+      - Urgent care needed
+      - Life or death situation
+      - I'm having a medical emergency
+
+  - intent: talk_to_human
+    examples: |
+      - I want to talk to a human
+      - Can I speak with a person
+      - I need human assistance
+      - Connect me to a real person
+      - I want to talk to someone
+      - Can I speak with a doctor
+      - I need to talk to a nurse
+      - Transfer me to a human
+      - I want human help
+      - Can someone call me
+      - I need personal assistance
+      - Connect me to staff
+      - I want to speak with a representative
+      - Can I talk to a healthcare provider
+      - I need real human support
+
+  - intent: provide_name
+    examples: |
+      - my name is [John](patient_name)
+      - I'm [Sarah](patient_name)
+      - [Michael Smith](patient_name)
+      - call me [Jane](patient_name)
+      - [Alex](patient_name) is my name
+      - it's [Robert](patient_name)
+
+  - intent: provide_email
+    examples: |
+      - my email is [john@example.com](patient_email)
+      - [sarah.smith@email.com](patient_email)
+      - it's [test@test.com](patient_email)
+      - [contact@example.org](patient_email)
+      - you can reach me at [myemail@domain.com](patient_email)
+
+  - intent: get_address
+    examples: |
+      - Where is the hospital located?
+      - What is the address?
+      - Can you give me the location?
+      - How do I reach the location?
+      - Please tell me the address of the hospital
+  - intent: handover_to_nurse
+    examples: |
+      - I need to talk to a nurse
+      - I need to speak with a nurse

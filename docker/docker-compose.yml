@@ -1,0 +1,416 @@
+# # version: '3.8'
+
+# # services:
+# #   # Rasa Action Server
+# #   rasa-actions:
+# #     build:
+# #       context: ../rasa
+# #       dockerfile: Dockerfile
+# #     command: ["rasa", "run", "actions", "--actions", "actions", "--debug"]
+# #     ports:
+# #       - "5055:5055"
+# #     volumes:
+# #       - ../rasa/actions:/app/actions:ro
+# #     environment:
+# #       - RASA_SDK_ENDPOINT=http://localhost:5055/webhook
+# #     healthcheck:
+# #       test: ["CMD", "curl", "-f", "http://localhost:5055/health"]
+# #       interval: 30s
+# #       timeout: 10s
+# #       retries: 3
+
+# #   # Rasa Core Server
+# #   rasa-core:
+# #     build:
+# #       context: ../rasa
+# #       dockerfile: Dockerfile
+# #     command: ["rasa", "run", "--enable-api", "--cors", "*", "--debug"]
+# #     ports:
+# #       - "5005:5005"
+# #     volumes:
+# #       - ../rasa:/app:ro
+# #     depends_on:
+# #       - rasa-actions
+# #     environment:
+# #       - RASA_ACTION_ENDPOINT=http://rasa-actions:5055/webhook
+# #     healthcheck:
+# #       test: ["CMD", "curl", "-f", "http://localhost:5005/status"]
+# #       interval: 30s
+# #       timeout: 10s
+# #       retries: 3
+
+# #   # FastAPI Backend
+# #   backend:
+# #     build:
+# #       context: ../backend
+# #       dockerfile: Dockerfile
+# #     command: ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8000", "--reload"]
+# #     ports:
+# #       - "8000:8000"
+# #     volumes:
+# #       - ../backend/app:/app/app
+# #     depends_on:
+# #       - rasa-core
+# #     environment:
+# #       - RASA_SERVER_URL=http://rasa-core:5005
+# #       - RASA_ACTION_SERVER_URL=http://rasa-actions:5055
+# #       - DEBUG=true
+# #     healthcheck:
+# #       test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
+# #       interval: 30s
+# #       timeout: 10s
+# #       retries: 3
+
+# #   # React Frontend
+# #   frontend:
+# #     build:
+# #       context: ../frontend
+# #       dockerfile: Dockerfile
+# #     ports:
+# #       - "3000:80"
+# #     depends_on:
+# #       - backend
+# #     environment:
+# #       - VITE_API_BASE_URL=http://localhost:8000
+# #       - VITE_WS_BASE_URL=ws://localhost:8000
+# #     healthcheck:
+# #       test: ["CMD", "curl", "-f", "http://localhost:80"]
+# #       interval: 30s
+# #       timeout: 10s
+# #       retries: 3
+
+# # networks:
+# #   default:
+# #     driver: bridge
+
+# # volumes:
+# #   rasa_models:
+# # version: "3.8"
+
+# # services:
+# #   # Rasa Action Server
+# #   rasa-actions:
+# #     build:
+# #       context: ../rasa
+# #       dockerfile: Dockerfile
+# #     command: ["rasa", "run", "actions", "--actions", "actions", "--debug"]
+# #     ports:
+# #       - "5055:5055"
+# #     volumes:
+# #       - ../rasa/actions:/app/actions:ro
+# #     environment:
+# #       - RASA_SDK_ENDPOINT=http://localhost:5055/webhook
+# #     healthcheck:
+# #       test: ["CMD", "curl", "-f", "http://localhost:5055/health"]
+# #       interval: 30s
+# #       timeout: 10s
+# #       retries: 3
+
+# #   # Rasa Core Server
+# #   rasa-core:
+# #     build:
+# #       context: ../rasa
+# #       dockerfile: Dockerfile
+# #     command: ["rasa", "run", "--enable-api", "--cors", "*", "--debug"]
+# #     ports:
+# #       - "5005:5005"
+# #     volumes:
+# #       - ../rasa:/app:ro # code is mounted read-only
+# #       - rasa_models:/models # trained models persist here
+# #     depends_on:
+# #       - rasa-actions
+# #     environment:
+# #       - RASA_ACTION_ENDPOINT=http://rasa-actions:5055/webhook
+# #     healthcheck:
+# #       test: ["CMD", "curl", "-f", "http://localhost:5005/status"]
+# #       interval: 30s
+# #       timeout: 10s
+# #       retries: 3
+
+# #   # FastAPI Backend
+# #   backend:
+# #     build:
+# #       context: ../backend
+# #       dockerfile: Dockerfile
+# #     command:
+# #       [
+# #         "uvicorn",
+# #         "app.main:app",
+# #         "--host",
+# #         "0.0.0.0",
+# #         "--port",
+# #         "8000",
+# #         "--reload",
+# #       ]
+# #     ports:
+# #       - "8000:8000"
+# #     volumes:
+# #       - ../backend/app:/app/app
+# #     depends_on:
+# #       - rasa-core
+# #     environment:
+# #       - RASA_SERVER_URL=http://rasa-core:5005
+# #       - RASA_ACTION_SERVER_URL=http://rasa-actions:5055
+# #       - DEBUG=true
+# #     healthcheck:
+# #       test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
+# #       interval: 30s
+# #       timeout: 10s
+# #       retries: 3
+
+# #   # React Frontend
+# #   frontend:
+# #     build:
+# #       context: ../frontend
+# #       dockerfile: Dockerfile
+# #     ports:
+# #       - "3000:80"
+# #     depends_on:
+# #       - backend
+# #     environment:
+# #       - VITE_API_BASE_URL=http://localhost:8000
+# #       - VITE_WS_BASE_URL=ws://localhost:8000
+# #     healthcheck:
+# #       test: ["CMD", "curl", "-f", "http://localhost:80"]
+# #       interval: 30s
+# #       timeout: 10s
+# #       retries: 3
+
+# # networks:
+# #   default:
+# #     driver: bridge
+
+# # volumes:
+# #   rasa_models:
+
+# services:
+#   # Rasa Action Server
+#   rasa-actions:
+#     build:
+#       context: ../rasa
+#       dockerfile: Dockerfile
+#     command: ["run", "actions", "--actions", "actions", "--debug"]
+#     ports:
+#       - "5055:5055"
+#     volumes:
+#       - ../rasa/actions:/app/actions # allow editing actions live
+#     environment:
+#       - RASA_SDK_ENDPOINT=http://rasa-actions:5055/webhook
+#     healthcheck:
+#       test: ["CMD", "curl", "-f", "http://localhost:5055/health"]
+#       interval: 30s
+#       timeout: 10s
+#       retries: 3
+
+#   # Rasa Core Server
+#   rasa-core:
+#     build:
+#       context: ../rasa
+#       dockerfile: Dockerfile
+#     command:
+#       [
+#         "run",
+#         "--enable-api",
+#         "--cors",
+#         "*",
+#         "--debug",
+#         "--domain",
+#         "/app/data/domain.yml",
+#         "--model",
+#         "/models",
+#       ]
+
+#       # ["run", "--enable-api", "--cors", "*", "--debug", "--model", "/models"]
+#     ports:
+#       - "5005:5005"
+#     volumes:
+#       - ../rasa:/app:ro # project code mounted read-only
+#       - rasa_models:/models # trained models persist here
+#     depends_on:
+#       - rasa-actions
+#     environment:
+#       - RASA_ACTION_ENDPOINT=http://rasa-actions:5055/webhook
+#     healthcheck:
+#       test: ["CMD", "curl", "-f", "http://localhost:5005/status"]
+#       interval: 30s
+#       timeout: 10s
+#       retries: 3
+
+#   # Rasa Training (run on demand)
+#   rasa-train:
+#     build:
+#       context: ../rasa
+#       dockerfile: Dockerfile
+#       # command: ["train", "--out", "/models"]
+#     command:
+#       [
+#         "train",
+#         "--data",
+#         "/app/data",
+#         "--domain",
+#         "/app/data/domain.yml",
+#         "--out",
+#         "/models",
+#       ]
+
+#     volumes:
+#       - ../rasa:/app # project code
+#       - rasa_models:/models # persist trained models
+#     profiles: ["manual"] # only runs when you explicitly call it
+
+#   # FastAPI Backend
+#   backend:
+#     build:
+#       context: ../backend
+#       dockerfile: Dockerfile
+#     command: ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8000"]
+#     ports:
+#       - "8000:8000"
+#     volumes:
+#       - ../backend/app:/app/app
+#     depends_on:
+#       - rasa-core
+#     environment:
+#       - RASA_SERVER_URL=http://rasa-core:5005
+#       - RASA_ACTION_SERVER_URL=http://rasa-actions:5055
+#       - DEBUG=true
+#     healthcheck:
+#       test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
+#       interval: 30s
+#       timeout: 10s
+#       retries: 3
+
+#   # React Frontend
+#   frontend:
+#     build:
+#       context: ../frontend
+#       dockerfile: Dockerfile
+#     ports:
+#       - "3000:80"
+#     depends_on:
+#       - backend
+#     environment:
+#       - VITE_API_BASE_URL=http://backend:8000 # use service name inside Docker
+#       - VITE_WS_BASE_URL=ws://backend:8000
+#     healthcheck:
+#       test: ["CMD", "curl", "-f", "http://localhost:80"]
+#       interval: 30s
+#       timeout: 10s
+#       retries: 3
+
+# networks:
+#   default:
+#     driver: bridge
+
+# volumes:
+#   rasa_models:
+
+services:
+  # Rasa Action Server
+  rasa-actions:
+    container_name: rasa-actions
+    build:
+      context: ../rasa
+      dockerfile: Dockerfile
+    command: ["run", "actions", "--actions", "actions", "--debug"]
+    ports:
+      - "5055:5055"
+    volumes:
+      - ../rasa/actions:/app/actions # allow editing actions live
+    environment:
+      - RASA_SDK_ENDPOINT=http://rasa-actions:5055/webhook
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:5055/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  # Rasa Core Server
+  rasa-core:
+    container_name: rasa-core
+    build:
+      context: ../rasa
+      dockerfile: Dockerfile
+    command:
+      ["run", "--enable-api", "--cors", "*", "--debug", "--model", "/models"]
+    ports:
+      - "5005:5005"
+    volumes:
+      - ../rasa:/app:ro # project code mounted read-only
+      - ../rasa/models:/models # use bind mount instead of named volume
+    depends_on:
+      - rasa-actions
+    environment:
+      - RASA_SERVER_URL=http://rasa-core:5005
+      - RASA_ACTION_ENDPOINT=http://rasa-actions:5055/webhook
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:5005/status"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  # Rasa Training (run on demand)
+  rasa-train:
+    build:
+      context: ../rasa
+      dockerfile: Dockerfile
+    command:
+      [
+        "train",
+        "--data",
+        "/app/data",
+        "--domain",
+        "/app/data/domain.yml",
+        "--out",
+        "/models",
+      ]
+    volumes:
+      - ../rasa:/app # project code
+      - ../rasa/models:/models # use bind mount instead of named volume
+    profiles: ["manual"] # only runs when you explicitly call it
+
+  # FastAPI Backend
+  backend:
+    container_name: backend
+    build:
+      context: ../backend
+      dockerfile: Dockerfile
+    command: ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8000"]
+    ports:
+      - "8000:8000"
+    volumes:
+      - ../backend/app:/app/app
+    depends_on:
+      - rasa-core
+    environment:
+      - RASA_SERVER_URL=http://rasa-core:5005
+      - RASA_ACTION_SERVER_URL=http://rasa-actions:5055
+      - DEBUG=true
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  # React Frontend
+  frontend:
+    container_name: frontend
+    build:
+      context: ../frontend
+      dockerfile: Dockerfile
+    ports:
+      - "3000:80"
+    depends_on:
+      - backend
+    environment:
+      - VITE_API_BASE_URL=http://backend:8000 # use service name inside Docker
+      - VITE_WS_BASE_URL=ws://backend:8000
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:80"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+networks:
+  default:
+    driver: bridge

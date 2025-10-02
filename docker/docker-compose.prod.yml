@@ -1,0 +1,86 @@
+version: '3.8'
+
+services:
+  # Rasa Action Server
+  rasa-actions:
+    build:
+      context: ../rasa
+      dockerfile: Dockerfile
+    command: ["rasa", "run", "actions", "--actions", "actions"]
+    ports:
+      - "5055:5055"
+    environment:
+      - RASA_SDK_ENDPOINT=http://localhost:5055/webhook
+    deploy:
+      replicas: 1
+      resources:
+        limits:
+          memory: 512M
+        reservations:
+          memory: 256M
+    restart: unless-stopped
+
+  # Rasa Core Server
+  rasa-core:
+    build:
+      context: ../rasa
+      dockerfile: Dockerfile
+    command: ["rasa", "run", "--enable-api", "--cors", "*"]
+    ports:
+      - "5005:5005"
+    depends_on:
+      - rasa-actions
+    environment:
+      - RASA_ACTION_ENDPOINT=http://rasa-actions:5055/webhook
+    deploy:
+      replicas: 1
+      resources:
+        limits:
+          memory: 1G
+        reservations:
+          memory: 512M
+    restart: unless-stopped
+
+  # FastAPI Backend
+  backend:
+    build:
+      context: ../backend
+      dockerfile: Dockerfile
+    ports:
+      - "8000:8000"
+    depends_on:
+      - rasa-core
+    environment:
+      - RASA_SERVER_URL=http://rasa-core:5005
+      - RASA_ACTION_SERVER_URL=http://rasa-actions:5055
+      - DEBUG=false
+    deploy:
+      replicas: 2
+      resources:
+        limits:
+          memory: 512M
+        reservations:
+          memory: 256M
+    restart: unless-stopped
+
+  # React Frontend
+  frontend:
+    build:
+      context: ../frontend
+      dockerfile: Dockerfile
+    ports:
+      - "80:80"
+    depends_on:
+      - backend
+    deploy:
+      replicas: 1
+      resources:
+        limits:
+          memory: 128M
+        reservations:
+          memory: 64M
+    restart: unless-stopped
+
+networks:
+  default:
+    driver: bridge

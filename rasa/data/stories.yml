@@ -1,0 +1,135 @@
+# version: "3.1"
+
+# stories:
+#   - story: greet and help
+#     steps:
+#       - intent: greet
+#       - action: utter_greet
+
+#   - story: goodbye
+#     steps:
+#       - intent: goodbye
+#       - action: utter_goodbye
+
+#   - story: report symptoms
+#     steps:
+#       - intent: report_symptom
+#       - action: action_assess_symptoms
+
+#   - story: emergency path
+#     steps:
+#       - intent: emergency
+#       - action: utter_emergency_warning
+
+#   - story: book appointment
+#     steps:
+#       - intent: book_appointment
+#       - action: patient_form
+#       - active_loop: patient_form
+#       - active_loop: null
+#       - action: action_book_appointment
+
+#   - story: get health advice
+#     steps:
+#       - intent: get_advice
+#       - action: action_provide_health_advice
+
+#   - story: handover to human
+#     steps:
+#       - intent: handover_to_nurse
+#       - action: utter_handover_message
+
+#   - story: out of scope
+#     steps:
+#       - intent: out_of_scope
+#       - action: utter_default
+version: "3.1"
+
+stories:
+  - story: greet and report symptoms
+    steps:
+      - intent: greet
+      - action: utter_greet
+      - intent: report_symptoms
+      - action: action_assess_symptoms
+
+  - story: direct symptom report
+    steps:
+      - intent: report_symptoms
+      - action: action_assess_symptoms
+
+  # - story: book appointment after symptoms
+  #   steps:
+  #     - intent: report_symptoms
+  #     - action: action_assess_symptoms
+  #     - intent: affirm
+  #     - action: utter_ask_patient_name
+  #     - intent: provide_name
+  #     - action: utter_ask_patient_email
+  #     - intent: provide_email
+  #     - action: action_book_appointment
+  - story: book appointment after symptoms
+    steps:
+      - intent: report_symptoms
+      - action: action_assess_symptoms
+      - intent: affirm
+      - action: patient_form
+      - active_loop: patient_form
+      - active_loop: null
+      - action: action_book_appointment
+
+  # - story: direct appointment booking
+  #   steps:
+  #     - intent: book_appointment
+  #     - action: utter_ask_patient_name
+  #     - intent: provide_name
+  #     - action: utter_ask_patient_email
+  #     - intent: provide_email
+  #     - action: action_book_appointment
+  - story: direct appointment booking
+    steps:
+      - intent: book_appointment
+      - action: patient_form
+      - active_loop: patient_form
+      - active_loop: null
+      - action: action_book_appointment
+
+  - story: get health advice
+    steps:
+      - intent: get_health_advice
+      - action: action_provide_health_advice
+
+  - story: talk to human
+    steps:
+      - intent: talk_to_human
+      - action: action_handover_to_human
+  - story: handover to human
+    steps:
+      - intent: handover_to_nurse
+      - action: utter_handover_message
+
+  - story: greet and goodbye
+    steps:
+      - intent: greet
+      - action: utter_greet
+      - intent: goodbye
+      - action: utter_goodbye
+
+  # - story: emergency inquiry
+  #   steps:
+  #     - intent: ask_emergency
+  #     - action: action_assess_symptoms
+  - story: emergency inquiry
+    steps:
+      - intent: ask_emergency
+      - action: utter_emergency_warning
+
+  - story: provide hospital address
+    steps:
+      - intent: get_address
+      - action: utter_address
+
+  - story: out of scope
+    steps:
+      - intent: out_of_scope
+      - action: utter_default

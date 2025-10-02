@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<conversations>
+  <conversation id="conv_001">
+    <turn>
+      <user>Hello, I have a headache</user>
+      <bot>I can help assess your symptoms. How severe is your headache on a scale of 1-10?</bot>
+    </turn>
+  </conversation>
+  <conversation id="conv_002">
+    <turn>
+      <user>I want to book an appointment</user>
+      <bot>I'll help you book an appointment. What is your name?</bot>
+    </turn>
+  </conversation>
+</conversations>
