@@ -48,5 +48,5 @@ EXPOSE 8000
 HEALTHCHECK --interval=30s --timeout=10s --start-period=5s --retries=3 \
     CMD curl -f http://localhost:8000/health || exit 1
 
-# Start command - Use absolute path to models directory
-CMD ["sh", "-c", "cd /app/rasa && rasa run actions --actions actions --port 5055 & sleep 10 && cd /app/rasa && rasa run --enable-api --cors '*' --port 5005 --model /app/rasa/models & sleep 15 && cd /app/backend && uvicorn app.main:app --host 0.0.0.0 --port 8000"]
+# Start command - Use absolute path to models directory and longer waits
+CMD ["sh", "-c", "cd /app/rasa && rasa run actions --actions actions --port 5055 & sleep 25 && cd /app/rasa && rasa run --enable-api --cors '*' --port 5005 --model /app/rasa/models & sleep 30 && cd /app/backend && uvicorn app.main:app --host 0.0.0.0 --port 8000"]
