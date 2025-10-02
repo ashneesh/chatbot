@@ -245,10 +245,8 @@ function App() {
       // const wsUrl = `ws://localhost:8000/ws/chat/${sessionId.current}`;
 
       const getWebSocketUrl = () => {
-        if (import.meta.env.VITE_WS_BASE_URL) {
-          return `${import.meta.env.VITE_WS_BASE_URL}/ws/chat/${
-            sessionId.current
-          }`;
+        if (import.meta.env.VITE_WS_URL) {
+          return `${import.meta.env.VITE_WS_URL}/ws/chat/${sessionId.current}`;
         }
         // fallback for host dev
         return `ws://${window.location.hostname}:8000/ws/chat/${sessionId.current}`;
