@@ -336,6 +336,33 @@ nlu:
       - Can you give me the location?
       - How do I reach the location?
       - Please tell me the address of the hospital
+  - intent: cancel_appointment
+    examples: |
+      - I want to cancel my appointment
+      - Cancel my appointment
+      - I need to cancel my booking
+      - Can I cancel my appointment
+      - I want to reschedule my appointment
+      - Cancel my visit
+      - I cannot make it to my appointment
+      - I need to cancel my scheduled appointment
+      - Please cancel my appointment
+      - I want to cancel my doctor's appointment
+      - Cancel my medical appointment
+      - I need to cancel my consultation
+      - Can you cancel my appointment
+      - I want to cancel my booking
+      - Cancel my scheduled visit
+      - I cannot attend my appointment
+      - I need to cancel my upcoming appointment
+      - Please cancel my medical visit
+      - I want to cancel my healthcare appointment
+      - Cancel my doctor visit
+      - I need to reschedule my appointment
+      - I want to cancel my appointment for tomorrow
+      - Cancel my appointment please
+      - I cannot make my appointment
+      - I need to cancel my scheduled consultation
   - intent: handover_to_nurse
     examples: |
       - I need to talk to a nurse

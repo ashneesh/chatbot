@@ -166,6 +166,39 @@ class ActionDefaultFallback(Action):
 
         return []
 
+class ActionCancelAppointment(Action):
+    """Cancel an existing appointment"""
+
+    def name(self) -> Text:
+        return "action_cancel_appointment"
+
+    def run(self, dispatcher: CollectingDispatcher,
+            tracker: Tracker,
+            domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
+        
+        logger.info("Entered appointment cancellation action")
+        
+        # In a real implementation, this would query the database
+        # For now, we'll simulate the cancellation process
+        latest_message = tracker.latest_message.get('text', '').lower()
+        
+        # Check if user provided appointment details
+        if any(keyword in latest_message for keyword in ['appointment', 'booking', 'visit']):
+            # Simulate successful cancellation
+            dispatcher.utter_message(
+                text="✅ Your appointment has been successfully cancelled. "
+                     "You will receive a confirmation email shortly. "
+                     "If you need to reschedule, please let me know!"
+            )
+        else:
+            dispatcher.utter_message(
+                text="I'd be happy to help you cancel your appointment. "
+                     "Please provide your appointment ID or the email address "
+                     "you used for booking, and I'll cancel it for you."
+            )
+
+        return []
+
 class ValidatePatientForm(FormValidationAction):
     """Validate patient form inputs"""
 

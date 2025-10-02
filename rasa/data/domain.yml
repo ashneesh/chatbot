@@ -92,6 +92,7 @@ intents:
   - deny
   - report_symptoms
   - book_appointment
+  - cancel_appointment
   - get_health_advice
   - ask_emergency
   - talk_to_human
@@ -193,8 +194,17 @@ responses:
   utter_ask_patient_email:
     - text: "What's your email address so we can send you confirmation?"
 
+  utter_ask_appointment_id:
+    - text: "Please provide your appointment ID or the email address used for booking."
+
+  utter_appointment_cancelled:
+    - text: "Your appointment has been successfully cancelled. You will receive a confirmation email shortly."
+
+  utter_appointment_not_found:
+    - text: " I couldn't find an appointment with those details. Please check your appointment ID or email address and try again."
+
   utter_emergency_warning:
-    - text: "🚨 This sounds like a medical emergency. Please call 911 immediately!"
+    - text: " This sounds like a medical emergency. Please call 911 immediately!"
 
   utter_handover_message:
     - text: "Connecting you to a nurse now."
@@ -208,6 +218,7 @@ responses:
 actions:
   - action_assess_symptoms
   - action_book_appointment
+  - action_cancel_appointment
   - action_provide_health_advice
   - action_handover_to_human
   - action_default_fallback

@@ -32,6 +32,11 @@ rules:
           - requested_slot: null
       - action: action_book_appointment
 
+  - rule: Handle appointment cancellation
+    steps:
+      - intent: cancel_appointment
+      - action: action_cancel_appointment
+
   - rule: Handle form interruption
     condition:
       - active_loop: patient_form
