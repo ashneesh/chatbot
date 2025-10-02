@@ -39,7 +39,19 @@ RUN useradd -m -u 1000 appuser && chown -R appuser:appuser /app
 
 # TRAIN MODEL AS NON-ROOT USER (Rasa 3.x compatible)
 USER appuser
-RUN cd rasa && rasa train --domain data/domain.yml --data data --out models --fixed-model-name current
+RUN cd rasa && \
+    echo "===========================================" && \
+    echo "🚂 Starting Rasa Training..." && \
+    echo "===========================================" && \
+    rasa train --domain data/domain.yml --data data --out models --fixed-model-name current && \
+    echo "===========================================" && \
+    echo "✅ Training Complete! Verifying model..." && \
+    echo "===========================================" && \
+    ls -lah models/ && \
+    echo "Model file details:" && \
+    ls -lh models/current.tar.gz && \
+    echo "==========================================="
+
 # Expose port (only 8000 for Render)
 EXPOSE 8000
 
@@ -47,5 +59,5 @@ EXPOSE 8000
 HEALTHCHECK --interval=30s --timeout=10s --start-period=5s --retries=3 \
     CMD curl -f http://localhost:8000/health || exit 1
 
-# Start command with proper cleanup
-CMD ["sh", "-c", "cd /app/rasa && rasa run actions --actions actions --port 5055 2>&1 & sleep 25 && rasa run --enable-api --cors '*' --port 5005 --model models/current.tar.gz 2>&1 & sleep 30 && cd /app/backend && exec uvicorn app.main:app --host 0.0.0.0 --port 8000"]
+# Start command with comprehensive logging
+CMD ["sh", "-c", "echo '==========================================' && echo 'STARTING HEALTHCARE CHATBOT SERVICES' && echo '==========================================' && echo '' && echo 'Environment Check:' && echo \"Working Directory: $(pwd)\" && echo \"User: $(whoami)\" && echo \"Python Version: $(python --version)\" && echo '' && echo 'File Structure:' && ls -la /app/ && echo '' && echo 'Rasa Directory:' && ls -la /app/rasa/ && echo '' && echo 'Rasa Models:' && ls -lah /app/rasa/models/ && echo '' && if [ -f /app/rasa/models/current.tar.gz ]; then echo 'Model file exists: current.tar.gz' && ls -lh /app/rasa/models/current.tar.gz; else echo 'ERROR: Model file NOT found!' && exit 1; fi && echo '' && echo '==========================================' && echo 'Starting Rasa Action Server (port 5055)' && echo '==========================================' && cd /app/rasa && rasa run actions --actions actions --port 5055 2>&1 & ACTION_PID=$! && echo \"Rasa Actions PID: $ACTION_PID\" && sleep 10 && if ps -p $ACTION_PID > /dev/null; then echo 'Rasa Action Server started successfully'; else echo 'Rasa Action Server failed to start'; fi && echo '' && echo '==========================================' && echo 'Starting Rasa Core Server (port 5005)' && echo '==========================================' && echo 'Using model: models/current.tar.gz' && rasa run --enable-api --cors '*' --port 5005 --model models/current.tar.gz 2>&1 & RASA_PID=$! && echo \"Rasa Core PID: $RASA_PID\" && sleep 15 && if ps -p $RASA_PID > /dev/null; then echo 'Rasa Core Server started successfully'; else echo 'Rasa Core Server failed to start'; fi && echo '' && echo '==========================================' && echo 'Starting FastAPI Backend (port 8000)' && echo '==========================================' && cd /app/backend && echo 'Backend directory contents:' && ls -la && echo '' && echo 'All processes running:' && ps aux && echo '' && echo 'All services starting... Backend launching now.' && echo '==========================================' && exec uvicorn app.main:app --host 0.0.0.0 --port 8000 --log-level debug"]
