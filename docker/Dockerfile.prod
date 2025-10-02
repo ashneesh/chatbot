@@ -1,9 +1,10 @@
-# Multi-stage build for production
+# Multi-stage build for production - v2
 FROM node:18-alpine AS frontend-build
 
 WORKDIR /app/frontend
 COPY frontend/package*.json ./
-RUN npm ci --only=production
+# Install ALL dependencies including dev dependencies (TypeScript, Vite, etc.)
+RUN npm ci --legacy-peer-deps
 COPY frontend/ ./
 RUN npm run build
 
@@ -18,7 +19,7 @@ RUN apt-get update && apt-get install -y \
     curl \
     && rm -rf /var/lib/apt/lists/*
 
-# Install Python dependencies
+# Install Python dependencies with correct versions
 COPY backend/requirements.txt ./
 RUN pip install --no-cache-dir -r requirements.txt
 
@@ -33,16 +34,19 @@ COPY database/ ./database/
 # Copy built frontend
 COPY --from=frontend-build /app/frontend/dist ./frontend/dist
 
-# Create non-root user
+# Create non-root user FIRST
 RUN useradd -m -u 1000 appuser && chown -R appuser:appuser /app
-USER appuser
 
-# Expose ports
-EXPOSE 8000 5005 5055
+# TRAIN MODEL AS NON-ROOT USER (Rasa 3.x compatible)
+USER appuser
+RUN cd rasa && rasa train
+
+# Expose port (only 8000 for Render)
+EXPOSE 8000
 
 # Health check
 HEALTHCHECK --interval=30s --timeout=10s --start-period=5s --retries=3 \
     CMD curl -f http://localhost:8000/health || exit 1
 
-# Start command
-CMD ["sh", "-c", "cd rasa && rasa train && rasa run actions --actions actions --port 5055 & rasa run --enable-api --cors '*' --port 5005 & cd ../backend && uvicorn app.main:app --host 0.0.0.0 --port 8000"]
+# Start command - Rasa 3.x compatible with better error handling
+CMD ["sh", "-c", "cd /app/rasa && rasa run actions --actions actions --port 5055 & sleep 10 && rasa run --enable-api --cors '*' --port 5005 & sleep 15 && cd /app/backend && uvicorn app.main:app --host 0.0.0.0 --port 8000"]
