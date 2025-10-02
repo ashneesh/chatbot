@@ -1,0 +1,48 @@
+# Multi-stage build for production
+FROM node:18-alpine AS frontend-build
+
+WORKDIR /app/frontend
+COPY frontend/package*.json ./
+RUN npm ci --only=production
+COPY frontend/ ./
+RUN npm run build
+
+FROM python:3.9-slim AS backend-build
+
+WORKDIR /app
+
+# Install system dependencies
+RUN apt-get update && apt-get install -y \
+    gcc \
+    g++ \
+    curl \
+    && rm -rf /var/lib/apt/lists/*
+
+# Install Python dependencies
+COPY backend/requirements.txt ./
+RUN pip install --no-cache-dir -r requirements.txt
+
+COPY rasa/requirements.txt ./rasa-requirements.txt
+RUN pip install --no-cache-dir -r rasa-requirements.txt
+
+# Copy application code
+COPY backend/ ./backend/
+COPY rasa/ ./rasa/
+COPY database/ ./database/
+
+# Copy built frontend
+COPY --from=frontend-build /app/frontend/dist ./frontend/dist
+
+# Create non-root user
+RUN useradd -m -u 1000 appuser && chown -R appuser:appuser /app
+USER appuser
+
+# Expose ports
+EXPOSE 8000 5005 5055
+
+# Health check
+HEALTHCHECK --interval=30s --timeout=10s --start-period=5s --retries=3 \
+    CMD curl -f http://localhost:8000/health || exit 1
+
+# Start command
+CMD ["sh", "-c", "cd rasa && rasa train && rasa run actions --actions actions --port 5055 & rasa run --enable-api --cors '*' --port 5005 & cd ../backend && uvicorn app.main:app --host 0.0.0.0 --port 8000"]
