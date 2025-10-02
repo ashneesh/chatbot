@@ -4,5 +4,7 @@ websockets==12.0
 python-socketio==5.10.0
 httpx==0.25.2
 python-dotenv==1.0.0
-pydantic==2.5.0
+pydantic<2.0  # ← CRITICAL: Must be <2.0 for Rasa 3.x
 pydantic-settings==2.1.0
+asyncpg==0.29.0
+supabase==2.0.0
