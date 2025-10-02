@@ -1,24 +1,9 @@
 {
-  "version": 2,
-  "builds": [
-    {
-      "src": "package.json",
-      "use": "@vercel/static-build",
-      "config": {
-        "distDir": "dist"
-      }
-    }
-  ],
-  "routes": [
-    {
-      "src": "/(.*)",
-      "dest": "/index.html"
-    }
-  ],
-  "build": {
-    "env": {
-      "VITE_API_URL": "https://chatbot-gome.onrender.com",
-      "VITE_WS_URL": "wss://chatbot-gome.onrender.com"
-    }
+  "buildCommand": "npm run build",
+  "outputDirectory": "dist",
+  "framework": "vite",
+  "env": {
+    "VITE_API_URL": "https://chatbot-gome.onrender.com",
+    "VITE_WS_URL": "wss://chatbot-gome.onrender.com"
   }
 }
