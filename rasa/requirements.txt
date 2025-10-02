@@ -8,4 +8,4 @@ setuptools<81
 
 # Add missing dependencies for Rasa 3.x
 pydantic<2.0
-pydantic-settings<2.0
+
