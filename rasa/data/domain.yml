@@ -222,6 +222,7 @@ actions:
   - action_provide_health_advice
   - action_handover_to_human
   - action_default_fallback
+  - action_get_performance_metrics
   - validate_patient_form
 
 session_config:
