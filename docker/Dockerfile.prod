@@ -42,7 +42,7 @@ USER appuser
 RUN cd rasa && rasa train --out models
 
 # Expose port (only 8000 for Render)
-EXPOSE 8000 5055 5005
+EXPOSE 8000
 
 # Health check
 HEALTHCHECK --interval=30s --timeout=10s --start-period=5s --retries=3 \
